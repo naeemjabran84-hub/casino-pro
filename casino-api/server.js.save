@@ -1,0 +1,342 @@
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+
+// Dice
+app.get("/dice", (req, res) => {
+  let roll = Math.floor(Math.random()*6)+1;
+  res.json({ roll });
+});
+
+// Coin
+app.get("/coin", (req, res) => {
+  res.json({ win: Math.random() > 0.5 });
+});
+
+// Slot
+app.get("/slot", (req, res) => {
+  let symbols = ["🍒","🍋","🔔","💎","7️⃣"];
+  let result = [
+    symbols[Math.floor(Math.random()*symbols.length)],
+    symbols[Math.floor(Math.random()*symbols.length)],
+    symbols[Math.floor(Math.random()*symbols.length)]
+  ];
+  res.json(result);
+});
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running on port 3000");
+});
+
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// simple database (temporary)
+let users = {};
+
+// REGISTER
+app.post("/register", (req, res) => {
+  let { username, password } = req.body;
+
+  if (users[username]) {
+    return res.json({ success: false, msg: "User exists" });
+  }
+
+  users[username] = { password, balance: 1000 };
+
+  res.json({ success: true });
+});
+
+// LOGIN
+app.post("/login", (req, res) => {
+  let { username, password } = req.body;
+
+  if (!users[username] || users[username].password !== password) {
+    return res.json({ success: false });
+  }
+
+  res.json({ success: true, balance: users[username].balance });
+});
+
+// UPDATE BALANCE
+app.post("/update", (req, res) => {
+  let { username, balance } = req.body;
+
+  if (users[username]) {
+    users[username].balance = balance;
+  }
+
+  res.json({ success: true });
+});
+
+// GAMES
+app.get("/dice", (req, res) => {
+  res.json({ roll: Math.floor(Math.random()*6)+1 });
+});
+
+app.get("/coin", (req, res) => {
+  res.json({ win: Math.random() > 0.5 });
+});
+
+app.get("/slot", (req, res) => {
+  let s = ["🍒","🍋","🔔","💎","7️⃣"];
+  res.json([
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)]
+  ]);
+});
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running with login system");
+});
+^\
+
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// simple database (temporary)
+let users = {};
+
+// REGISTER
+app.post("/register", (req, res) => {
+  let { username, password } = req.body;
+
+  if (users[username]) {
+    return res.json({ success: false, msg: "User exists" });
+  }
+
+  users[username] = { password, balance: 1000 };
+
+  res.json({ success: true });
+});
+
+// LOGIN
+app.post("/login", (req, res) => {
+  let { username, password } = req.body;
+
+  if (!users[username] || users[username].password !== password) {
+    return res.json({ success: false });
+  }
+
+  res.json({ success: true, balance: users[username].balance });
+});
+
+// UPDATE BALANCE
+app.post("/update", (req, res) => {
+  let { username, balance } = req.body;
+
+  if (users[username]) {
+    users[username].balance = balance;
+  }
+
+  res.json({ success: true });
+});
+
+// GAMES
+app.get("/dice", (req, res) => {
+  res.json({ roll: Math.floor(Math.random()*6)+1 });
+});
+
+app.get("/coin", (req, res) => {
+  res.json({ win: Math.random() > 0.5 });
+});
+
+app.get("/slot", (req, res) => {
+  let s = ["🍒","🍋","🔔","💎","7️⃣"];
+  res.json([
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)]
+  ]);
+});
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running with login system");
+});
+node server.js
+
+^\
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// In-memory database
+let users = {};
+
+// Register
+app.post("/register", (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password)
+    return res.json({ success: false, msg: "Missing fields" });
+
+  if (users[username])
+    return res.json({ success: false, msg: "User exists" });
+
+  users[username] = {
+    password,
+    balance: 1000
+  };
+
+  res.json({ success: true });
+});
+
+// Login
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (!users[username] || users[username].password !== password)
+    return res.json({ success: false });
+
+  res.json({
+    success: true,
+    balance: users[username].balance
+  });
+});
+
+// Update balance
+app.post("/update", (req, res) => {
+  const { username, balance } = req.body;
+
+  if (users[username]) {
+    users[username].balance = balance;
+  }
+
+  res.json({ success: true });
+});
+
+// Games
+app.get("/dice", (req, res) => {
+  res.json({ roll: Math.floor(Math.random()*6)+1 });
+});
+
+app.get("/coin", (req, res) => {
+  res.json({ win: Math.random() > 0.5 });
+});
+
+app.get("/slot", (req, res) => {
+  const s = ["🍒","🍋","🔔","💎","7️⃣"];
+  res.json([
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)]
+  ]);
+});
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Casino API running on port 3000");
+});
+
+node server.js
+mongodb+srv://user:pass@cluster.mongodb.net/casino
+mkdir casino-pro
+cd casino-pro
+npm init -y
+npm install express cors mongoose bcrypt jsonwebtoken
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// 🔥 PUT YOUR MONGODB LINK HERE
+mongoose.connect("YOUR_MONGODB_URL");
+
+const UserSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+  balance: { type: Number, default: 1000 }
+});
+
+const User = mongoose.model("User", UserSchema);
+
+// REGISTER
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  let exist = await User.findOne({ username });
+  if (exist) return res.json({ success: false });
+
+  let hash = await bcrypt.hash(password, 10);
+
+  await User.create({ username, password: hash });
+
+  res.json({ success: true });
+});
+
+// LOGIN
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  let user = await User.findOne({ username });
+  if (!user) return res.json({ success: false });
+
+  let ok = await bcrypt.compare(password, user.password);
+  if (!ok) return res.json({ success: false });
+
+  let token = jwt.sign({ id: user._id }, "secret");
+
+  res.json({ success: true, token, balance: user.balance });
+});
+
+// AUTH MIDDLEWARE
+async function auth(req, res, next) {
+  try {
+    let token = req.headers.authorization;
+    let data = jwt.verify(token, "secret");
+    req.user = await User.findById(data.id);
+    next();
+  } catch {
+    res.status(401).send("Unauthorized");
+  }
+}
+
+// UPDATE BALANCE
+app.post("/update", auth, async (req, res) => {
+  req.user.balance = req.body.balance;
+  await req.user.save();
+  res.json({ success: true });
+});
+
+// GAMES
+app.get("/dice", (req, res) => {
+  res.json({ roll: Math.floor(Math.random()*6)+1 });
+});
+
+app.get("/coin", (req, res) => {
+  res.json({ win: Math.random() > 0.5 });
+});
+
+app.get("/slot", (req, res) => {
+  let s = ["🍒","🍋","🔔","💎","7️⃣"];
+  res.json([
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)],
+    s[Math.floor(Math.random()*s.length)]
+  ]);
+});
+
+app.listen(3000, () => console.log("PRO CASINO API RUNNING"));ls
+ls
+
+nano server.js
+nano server.js
+
